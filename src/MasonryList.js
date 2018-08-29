@@ -47,6 +47,11 @@ export type Props = {
   renderItem: ({ item: any, index: number, column: number }) => ?React.Element<
     any,
   >,
+  onViewableItemsChanged: ({
+    viewableItems: Array<any>,
+    changed: Array<any>,
+    column: number,
+  }) => void,
   getHeightForItem: ({ item: any, index: number }) => number,
   ListHeaderComponent?: ?React.ComponentType<any>,
   ListEmptyComponent?: ?React.ComponentType<any>,
@@ -222,6 +227,7 @@ export default class MasonryList extends React.Component<Props, State> {
       keyExtractor,
       onEndReached,
       listKey,
+      onViewableItemsChanged,
       ...props
     } = this.props;
     let headerElement;
@@ -253,6 +259,13 @@ export default class MasonryList extends React.Component<Props, State> {
             onEndReached={onEndReached}
             onEndReachedThreshold={this.props.onEndReachedThreshold}
             removeClippedSubviews={false}
+            onViewableItemsChanged={({ viewableItems, changed }) =>
+              onViewableItemsChanged &&
+              onViewableItemsChanged({
+                viewableItems,
+                changed,
+                column: col.index,
+              })}
           />,
         )}
       </View>
